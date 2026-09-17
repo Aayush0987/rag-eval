@@ -54,11 +54,11 @@ Legend: `[ ]` not started · `[~]` in progress · `[x]` done
 - [ ] **Not visually verified in a browser** — no screenshot/browser tool available in this session. Verified instead via: clean `tsc` type-check, dev server serving 200, and API response shapes matching the TS types exactly. Please eyeball it at http://localhost:5173 when you get a chance.
 
 ## Phase 8 — Documentation
-- [ ] README: metrics explained, architecture diagram
-- [ ] Custom vs RAGAS validation results/analysis
-- [ ] Dashboard screenshots
-- [ ] Example regression-catch walkthrough
-- [ ] Known limitations (LLM-as-judge cost/latency/bias)
+- [x] README: metrics explained, architecture diagram (root `README.md`)
+- [x] Custom vs RAGAS validation results/analysis (linked from README, full detail in `docs/ragas_comparison.md`)
+- [ ] Dashboard screenshots — blocked: no browser/screenshot tool in this session; noted explicitly in README instead
+- [x] Example regression-catch walkthrough (real data from the live regression test)
+- [x] Known limitations (LLM-as-judge cost/latency/bias, Groq free-tier daily cap hit live, custom-vs-RAGAS agreement caveat)
 
 ---
 
