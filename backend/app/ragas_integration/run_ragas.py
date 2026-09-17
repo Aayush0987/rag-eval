@@ -1,6 +1,6 @@
 from functools import lru_cache
 
-from langchain_community.embeddings import HuggingFaceEmbeddings
+from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_openai import ChatOpenAI
 from ragas import SingleTurnSample, evaluate
 from ragas.dataset_schema import EvaluationDataset
