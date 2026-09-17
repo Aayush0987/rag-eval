@@ -1,6 +1,6 @@
 import json
 
-from fastapi import APIRouter, Depends, HTTPException, UploadFile
+from fastapi import APIRouter, Depends, Form, HTTPException, UploadFile
 from sqlalchemy.orm import Session
 
 from app.api.schemas import ExampleResultOut, RunDetail, RunSummary, SingleExampleRequest
@@ -43,7 +43,9 @@ def _run_detail(run: Run) -> RunDetail:
 
 
 @router.post("/runs/batch", response_model=RunSummary)
-async def submit_batch(file: UploadFile, run_name: str = "batch-run", db: Session = Depends(get_db)):
+async def submit_batch(
+    file: UploadFile, run_name: str = Form("batch-run"), db: Session = Depends(get_db)
+):
     raw = (await file.read()).decode("utf-8")
     examples = []
     for line_no, line in enumerate(raw.splitlines(), start=1):
