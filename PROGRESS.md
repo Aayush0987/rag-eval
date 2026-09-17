@@ -51,7 +51,7 @@ Legend: `[ ]` not started · `[~]` in progress · `[x]` done
 - [x] Detail view (`RunDetailView.tsx`) — per-example, custom vs RAGAS side by side, expandable raw judge details
 - [x] Regression view (`RegressionView.tsx`) — baseline vs new run picker, degraded examples highlighted
 - [x] Submit-run view (`UploadForm.tsx`) — batch JSONL + single example, not in the original phase list but needed to drive the other three views
-- [ ] **Not visually verified in a browser** — no screenshot/browser tool available in this session. Verified instead via: clean `tsc` type-check, dev server serving 200, and API response shapes matching the TS types exactly. Please eyeball it at http://localhost:5173 when you get a chance.
+- [ ] **Not visually verified in a browser** — no screenshot/browser tool available in this session. Verified instead via: clean `tsc` type-check, dev server serving 200, and API response shapes matching the TS types exactly. Backend now has 3 real runs loaded (a batch + a marked baseline + a regressed run) so there's something meaningful to look at — please eyeball it at http://localhost:5173 when you get a chance.
 
 ## Phase 8 — Documentation
 - [x] README: metrics explained, architecture diagram (root `README.md`)
@@ -64,6 +64,8 @@ Legend: `[ ]` not started · `[~]` in progress · `[x]` done
 
 ## Bugs found and fixed (live, hit during build)
 - **`uvloop` + RAGAS incompatibility**: uvicorn's default event loop (`uvloop`) can't be patched by RAGAS's internal `nest_asyncio` call (`ValueError: Can't patch loop of type uvloop.Loop`) — only surfaced once RAGAS ran *inside* the actual server, not in standalone test scripts. Fixed by running uvicorn with `--loop asyncio`. **Anyone running this server must include that flag** — see updated "Running it" section in the README.
+- **`run_name` silently ignored on batch upload**: `run_name: str = "batch-run"` alongside an `UploadFile` param isn't bound to multipart form data without an explicit `Form(...)` annotation — FastAPI just quietly kept the default instead of erroring. Found by submitting a batch named `"demo-pair"` and seeing it come back as `"batch-run"`. Fixed in `backend/app/api/runs.py`.
+- **Gemini fallback needed its own retry/backoff**: initially only Groq had retry logic; Gemini's free tier (15 RPM on the lite model) got hit directly once Groq was exhausted, with no retry. Added the same tenacity backoff to `_call_gemini`.
 
 ## Known Limitations (live, hit during build)
 - **Groq free tier has both a per-minute (8000 TPM) and a per-day (200,000 TPD) token cap.** The per-minute one is handled with retry+backoff (`app/llm/groq_client.py`, tenacity, up to 6 attempts / 30s max wait). The **daily** cap is not retryable in any reasonable way — it was exhausted during today's testing (sanity check + comparison script + one batch submission, ~12 examples each doing 5-10+ LLM calls). A real evaluation run against hundreds of examples will need either a paid Groq tier or spreading runs across days. Worth a callout in the Phase 8 README's limitations section.
