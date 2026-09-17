@@ -6,6 +6,8 @@ class Settings(BaseSettings):
 
     groq_api_key: str = ""
     groq_model: str = "openai/gpt-oss-20b"
+    gemini_api_key: str = ""
+    gemini_model: str = "gemini-3.6-flash"
     database_url: str = "sqlite:///./rag_eval.db"
 
 
