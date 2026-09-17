@@ -3,7 +3,13 @@ from functools import lru_cache
 
 import httpx
 from groq import Groq, RateLimitError
-from tenacity import retry, retry_if_exception_type, stop_after_attempt, wait_random_exponential
+from tenacity import (
+    retry,
+    retry_if_exception,
+    retry_if_exception_type,
+    stop_after_attempt,
+    wait_random_exponential,
+)
 
 from app.config import settings
 
@@ -34,6 +40,16 @@ def _call_groq(system_prompt: str, user_prompt: str) -> str:
     return response.choices[0].message.content or "{}"
 
 
+def _is_rate_limit(exc: BaseException) -> bool:
+    return isinstance(exc, httpx.HTTPStatusError) and exc.response.status_code == 429
+
+
+@retry(
+    retry=retry_if_exception(_is_rate_limit),
+    wait=wait_random_exponential(multiplier=1, max=30),
+    stop=stop_after_attempt(4),
+    reraise=True,
+)
 def _call_gemini(system_prompt: str, user_prompt: str) -> str:
     response = httpx.post(
         _GEMINI_URL,

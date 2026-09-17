@@ -62,6 +62,9 @@ Legend: `[ ]` not started · `[~]` in progress · `[x]` done
 
 ---
 
+## Bugs found and fixed (live, hit during build)
+- **`uvloop` + RAGAS incompatibility**: uvicorn's default event loop (`uvloop`) can't be patched by RAGAS's internal `nest_asyncio` call (`ValueError: Can't patch loop of type uvloop.Loop`) — only surfaced once RAGAS ran *inside* the actual server, not in standalone test scripts. Fixed by running uvicorn with `--loop asyncio`. **Anyone running this server must include that flag** — see updated "Running it" section in the README.
+
 ## Known Limitations (live, hit during build)
 - **Groq free tier has both a per-minute (8000 TPM) and a per-day (200,000 TPD) token cap.** The per-minute one is handled with retry+backoff (`app/llm/groq_client.py`, tenacity, up to 6 attempts / 30s max wait). The **daily** cap is not retryable in any reasonable way — it was exhausted during today's testing (sanity check + comparison script + one batch submission, ~12 examples each doing 5-10+ LLM calls). A real evaluation run against hundreds of examples will need either a paid Groq tier or spreading runs across days. Worth a callout in the Phase 8 README's limitations section.
 
