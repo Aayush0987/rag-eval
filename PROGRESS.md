@@ -12,21 +12,22 @@ Legend: `[ ]` not started · `[~]` in progress · `[x]` done
 - [ ] Observability/dashboard design principles
 
 ## Phase 1 — Input Format & Ingestion
-- [ ] Pydantic schema for (question, contexts, answer, ground_truth?)
-- [ ] Batch JSONL upload endpoint
-- [ ] Single-example API endpoint
+- [x] Pydantic schema for (question, contexts, answer, ground_truth?)
+- [x] Batch JSONL upload endpoint (`POST /runs/batch`)
+- [x] Single-example API endpoint (`POST /runs/single`)
 
 ## Phase 2 — Build Custom Metrics (from scratch)
-- [ ] Faithfulness (claim decomposition + NLI/LLM-judge entailment)
-- [ ] Answer Relevance — embedding similarity approach
-- [ ] Answer Relevance — LLM-as-judge approach
-- [ ] Context Precision/Recall — LLM-as-judge relevance labeling
-- [ ] Synthetic sanity-check set (obviously faithful vs hallucinated)
-- [ ] Verify each metric behaves correctly on sanity set
+- [x] Faithfulness (LLM claim decomposition + local NLI cross-encoder entailment)
+- [x] Answer Relevance — embedding similarity approach (sentence-transformers)
+- [x] Answer Relevance — LLM-as-judge approach (Groq)
+- [x] Context Precision/Recall — LLM-as-judge relevance labeling (Groq)
+- [x] Synthetic sanity-check set (`data/sanity_check/examples.jsonl`, 6 good/bad pairs)
+- [ ] Verify each metric behaves correctly on sanity set — **blocked on GROQ_API_KEY**, script ready at `backend/scripts/sanity_check.py`
 
 ## Phase 3 — RAGAS Integration
-- [ ] Run same inputs through RAGAS equivalents
-- [ ] Persist custom + RAGAS scores side by side per example
+- [x] Run same inputs through RAGAS equivalents (`app/ragas_integration/run_ragas.py`, via Groq's OpenAI-compatible endpoint)
+- [x] Persist custom + RAGAS scores side by side per example (DB schema + crud.create_run)
+- [ ] Live end-to-end validation — blocked on GROQ_API_KEY
 
 ## Phase 4 — Comparison & Validation
 - [ ] Labeled test set with clear-cut good/bad examples
@@ -34,15 +35,16 @@ Legend: `[ ]` not started · `[~]` in progress · `[x]` done
 - [ ] Document agreement/divergence with concrete examples
 
 ## Phase 5 — Regression Testing
-- [ ] Mark a run as baseline (fixed test set + scores)
-- [ ] Re-run test set and diff against baseline
-- [ ] Flag score drops as regressions (per-example + aggregate)
+- [x] Mark a run as baseline (`POST /runs/{id}/baseline`)
+- [x] Re-run test set and diff against baseline (`app/metrics/regression.py`)
+- [x] Flag score drops as regressions (per-example + aggregate, threshold=0.1)
 
 ## Phase 6 — Backend API (FastAPI)
-- [ ] Submit run (batch or single)
-- [ ] Fetch run history
-- [ ] Fetch per-example scores for a run
-- [ ] Trigger regression comparison between two runs
+- [x] Submit run (batch or single)
+- [x] Fetch run history (`GET /runs`)
+- [x] Fetch per-example scores for a run (`GET /runs/{id}`)
+- [x] Trigger regression comparison between two runs (`GET /regression`)
+- [ ] Live smoke test of all endpoints against a real Groq key
 
 ## Phase 7 — Frontend Dashboard (React)
 - [ ] Run history view
