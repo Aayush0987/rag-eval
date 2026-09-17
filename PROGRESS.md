@@ -30,9 +30,9 @@ Legend: `[ ]` not started · `[~]` in progress · `[x]` done
 - [x] Live end-to-end validation — confirmed working. Early divergence spotted: RAGAS `answer_relevancy` scored a factually-wrong answer 0.82 (measures question/answer semantic alignment only) vs our LLM-judge's 0.0 (penalizes factual correctness) — good material for Phase 4
 
 ## Phase 4 — Comparison & Validation
-- [ ] Labeled test set with clear-cut good/bad examples
-- [ ] Compare custom vs RAGAS separation quality
-- [ ] Document agreement/divergence with concrete examples
+- [x] Labeled test set with clear-cut good/bad examples (reused `data/sanity_check/examples.jsonl`, 6 pairs)
+- [x] Compare custom vs RAGAS separation quality (`backend/scripts/compare_ragas.py`)
+- [x] Document agreement/divergence with concrete examples — `docs/ragas_comparison.md`. Headline finding: faithfulness agrees closely between the two implementations; answer relevance diverges sharply (RAGAS's `answer_relevancy` doesn't penalize factual incorrectness, ours does) — both are legitimate but answer different questions
 
 ## Phase 5 — Regression Testing
 - [x] Mark a run as baseline (`POST /runs/{id}/baseline`)
@@ -47,9 +47,11 @@ Legend: `[ ]` not started · `[~]` in progress · `[x]` done
 - [x] Live smoke test of all endpoints against a real Groq key — batch upload, run detail, baseline marking, and regression comparison all verified against real Groq calls
 
 ## Phase 7 — Frontend Dashboard (React)
-- [ ] Run history view
-- [ ] Detail view (per-example, custom vs RAGAS side by side)
-- [ ] Regression view (baseline vs new run, degraded examples highlighted)
+- [x] Run history view (`RunHistory.tsx`) — mark-baseline action included
+- [x] Detail view (`RunDetailView.tsx`) — per-example, custom vs RAGAS side by side, expandable raw judge details
+- [x] Regression view (`RegressionView.tsx`) — baseline vs new run picker, degraded examples highlighted
+- [x] Submit-run view (`UploadForm.tsx`) — batch JSONL + single example, not in the original phase list but needed to drive the other three views
+- [ ] **Not visually verified in a browser** — no screenshot/browser tool available in this session. Verified instead via: clean `tsc` type-check, dev server serving 200, and API response shapes matching the TS types exactly. Please eyeball it at http://localhost:5173 when you get a chance.
 
 ## Phase 8 — Documentation
 - [ ] README: metrics explained, architecture diagram
@@ -59,6 +61,9 @@ Legend: `[ ]` not started · `[~]` in progress · `[x]` done
 - [ ] Known limitations (LLM-as-judge cost/latency/bias)
 
 ---
+
+## Known Limitations (live, hit during build)
+- **Groq free tier has both a per-minute (8000 TPM) and a per-day (200,000 TPD) token cap.** The per-minute one is handled with retry+backoff (`app/llm/groq_client.py`, tenacity, up to 6 attempts / 30s max wait). The **daily** cap is not retryable in any reasonable way — it was exhausted during today's testing (sanity check + comparison script + one batch submission, ~12 examples each doing 5-10+ LLM calls). A real evaluation run against hundreds of examples will need either a paid Groq tier or spreading runs across days. Worth a callout in the Phase 8 README's limitations section.
 
 ## Decisions Log
 - **LLM-as-judge provider**: Groq (free tier) — decided 2026-09-17

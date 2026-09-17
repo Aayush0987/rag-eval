@@ -12,6 +12,7 @@ backend/.venv/
 
 # DB
 *.db
+*.db-journal
 *.sqlite
 *.sqlite3
 
