@@ -56,7 +56,7 @@ Legend: `[ ]` not started · `[~]` in progress · `[x]` done
 ## Phase 8 — Documentation
 - [x] README: metrics explained, architecture diagram (root `README.md`)
 - [x] Custom vs RAGAS validation results/analysis (linked from README, full detail in `docs/ragas_comparison.md`)
-- [x] Dashboard screenshots — captured via Claude in Chrome, embedded in README
+- [x] Dashboard screenshots — captured in the browser, embedded in README
 - [x] Example regression-catch walkthrough (real data from the live regression test)
 - [x] Known limitations (LLM-as-judge cost/latency/bias, Groq free-tier daily cap hit live, custom-vs-RAGAS agreement caveat)
 
