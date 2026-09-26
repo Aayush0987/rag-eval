@@ -276,3 +276,7 @@ th {
 .regressed-row {
   background: rgba(239, 93, 93, 0.08);
 }
+
+h4 {
+  margin: 20px 0 8px;
+}

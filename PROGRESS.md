@@ -4,7 +4,7 @@ Local-only for now. Nothing gets committed/pushed to GitHub until explicitly req
 
 Legend: `[ ]` not started · `[~]` in progress · `[x]` done
 
-## Phase 0 — Study
+## Phase 0 — Study (owned by user, not part of the code deliverable)
 - [ ] RAG evaluation theory: faithfulness, answer relevance, context precision/recall
 - [ ] NLI (entailment/contradiction/neutral) for faithfulness
 - [ ] LLM-as-judge methodology: prompt design, rubrics, biases
@@ -51,12 +51,12 @@ Legend: `[ ]` not started · `[~]` in progress · `[x]` done
 - [x] Detail view (`RunDetailView.tsx`) — per-example, custom vs RAGAS side by side, expandable raw judge details
 - [x] Regression view (`RegressionView.tsx`) — baseline vs new run picker, degraded examples highlighted
 - [x] Submit-run view (`UploadForm.tsx`) — batch JSONL + single example, not in the original phase list but needed to drive the other three views
-- [ ] **Not visually verified in a browser** — no screenshot/browser tool available in this session. Verified instead via: clean `tsc` type-check, dev server serving 200, and API response shapes matching the TS types exactly. Backend now has 3 real runs loaded (a batch + a marked baseline + a regressed run) so there's something meaningful to look at — please eyeball it at http://localhost:5173 when you get a chance.
+- [x] Visually verified in Chrome (2026-09-27) — all four views render correctly against the live backend; screenshots in `docs/screenshots/`
 
 ## Phase 8 — Documentation
 - [x] README: metrics explained, architecture diagram (root `README.md`)
 - [x] Custom vs RAGAS validation results/analysis (linked from README, full detail in `docs/ragas_comparison.md`)
-- [ ] Dashboard screenshots — blocked: no browser/screenshot tool in this session; noted explicitly in README instead
+- [x] Dashboard screenshots — captured via Claude in Chrome, embedded in README
 - [x] Example regression-catch walkthrough (real data from the live regression test)
 - [x] Known limitations (LLM-as-judge cost/latency/bias, Groq free-tier daily cap hit live, custom-vs-RAGAS agreement caveat)
 

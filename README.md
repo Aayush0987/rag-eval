@@ -136,17 +136,37 @@ regression endpoint also reports questions present in only one of the two
 runs, rather than silently dropping them, since a shrinking test set is
 itself worth noticing.
 
+## Tests
+
+Offline unit tests (no LLM/API keys needed) cover the regression logic:
+`cd backend && uv run --with pytest pytest -q`.
+
 ## Dashboard
 
-Three views: run history (with a "mark as baseline" action), per-example
+Four views: run history (with a "mark as baseline" action), per-example
 detail (custom vs RAGAS scores side by side, expandable raw judge output),
-and a regression view (pick a baseline + a run, see aggregate and
-per-example deltas with regressions highlighted). Screenshots aren't
-included here — this session had no browser/screenshot tool available, so
-the UI was verified via a clean TypeScript build and by matching the
-frontend's types against the backend's actual response shapes, not by
-looking at it. Worth a look at `localhost:5173` before calling this phase
-done.
+a regression view (pick a baseline + a run, see aggregate and per-example
+deltas with regressions highlighted), and a submit view (batch JSONL or a
+single example). All four were verified in a real browser against the live
+backend.
+
+**Run history**
+
+![Run history](docs/screenshots/run-history.jpg)
+
+**Per-example detail** — note the answer-relevance divergence on the second
+example (custom LLM judge 0.20 vs RAGAS 0.79), the same effect analyzed in
+[`docs/ragas_comparison.md`](docs/ragas_comparison.md).
+
+![Run detail](docs/screenshots/run-detail.jpg)
+
+**Regression view**
+
+![Regression](docs/screenshots/regression.jpg)
+
+**Submit run**
+
+![Submit run](docs/screenshots/submit-run.jpg)
 
 ## Known limitations
 
