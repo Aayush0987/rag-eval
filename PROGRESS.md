@@ -78,7 +78,7 @@ Legend: `[ ]` not started · `[~]` in progress · `[x]` done
 - **ragas version pin**: `ragas==0.2.15` (latest 0.4.3 has a broken import chain — `langchain_community.chat_models.vertexai` was removed upstream); paired with `langchain-community<0.4` to keep that module available
 - **Storage**: SQLite
 - **Package manager (backend)**: uv
-- **Git**: local repo only, no commits/pushes until user says so
+- **Git**: pushed to https://github.com/Aayush0987/rag-eval (public) on 2026-09-27 at user's request; history scanned for keys first
 
 ## Setup Notes
 - Backend: `cd backend && uv sync` (or `uv run <cmd>`)
