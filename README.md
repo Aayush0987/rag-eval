@@ -160,6 +160,11 @@ example (custom LLM judge 0.20 vs RAGAS 0.79), the same effect analyzed in
 
 ![Run detail](docs/screenshots/run-detail.jpg)
 
+**Raw judge details** — expanding an example shows the exact NLI label and
+scores per claim, plus the LLM judge's reasoning, so every score is auditable.
+
+![Raw judge details](docs/screenshots/raw-judge-details.jpg)
+
 **Regression view**
 
 ![Regression](docs/screenshots/regression.jpg)
@@ -167,6 +172,10 @@ example (custom LLM judge 0.20 vs RAGAS 0.79), the same effect analyzed in
 **Submit run**
 
 ![Submit run](docs/screenshots/submit-run.jpg)
+
+**Backend API** — FastAPI's auto-generated docs at `localhost:8000/docs`.
+
+![API docs](docs/screenshots/api-docs.jpg)
 
 ## Known limitations
 
