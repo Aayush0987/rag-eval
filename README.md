@@ -160,6 +160,12 @@ done.
   (`app/llm/groq_client.py`); the daily cap is not reasonably retryable and
   was exhausted during this build's own testing. A real evaluation workload
   of hundreds of examples needs a paid tier or multi-day spreading.
+- **Gemini fallback.** If `GEMINI_API_KEY` is set, judge calls fall back to
+  Gemini (`gemini-flash-lite-latest`, via its OpenAI-compatible endpoint)
+  when Groq stays rate-limited; RAGAS retries the whole evaluation on Gemini
+  if any metric comes back NaN. Gemini's free tier is about 15 requests per
+  minute, so large batches still run slowly. Some Gemini preview models have
+  far tighter caps (`gemini-3.6-flash` allowed only 20 requests per day).
 - **LLM-as-judge biases.** Known failure modes — position bias, verbosity
   bias, self-preference bias (the judge favoring answers phrased the way it
   would phrase them) — apply to every LLM-judge metric here and haven't
@@ -175,10 +181,15 @@ done.
 Backend:
 ```
 cd backend
-cp .env.example .env   # add your GROQ_API_KEY
+cp .env.example .env   # add GROQ_API_KEY (and optionally GEMINI_API_KEY as fallback)
 uv sync
-uv run uvicorn app.main:app --reload
+uv run uvicorn app.main:app --loop asyncio
 ```
+
+`--loop asyncio` is required: uvicorn's default `uvloop` can't be patched by
+RAGAS's internal `nest_asyncio` call, and every RAGAS evaluation inside the
+server fails with `Can't patch loop of type uvloop.Loop` without it. Don't
+delete `rag_eval.db` while the server is running.
 
 Frontend:
 ```
